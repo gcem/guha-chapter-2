@@ -37,7 +37,7 @@ void drawScene(void)
 
    glBegin(GL_LINE_STRIP);
       for(t = -10 * PI; t <= 10 * PI; t += PI/20.0) 
-         glVertex3f(R * cos(t), R * sin(t), t - 60.0);
+         glVertex3f(R * cos(t),  t, R * sin(t) - 60.0);
 	  // glVertex3f(R * cos(t), t, R * sin(t) - 60.0);
    glEnd();
 
