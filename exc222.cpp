@@ -37,7 +37,7 @@ void drawCircle(float x, float y, float r, float depth)
   glVertex3f(x, y, 0.0);
   for (int i = 0; i <= VERTICES; i++)
     {
-      angle = 2 * PI * i / VERTICES;
+      angle = 2 * PI * i / (float) VERTICES;
       glVertex3f(x + cos(angle) * r, y + sin(angle) * r, depth);
     }
   glEnd();
