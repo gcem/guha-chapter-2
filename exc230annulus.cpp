@@ -1,10 +1,9 @@
 // 
 // The number 8 using circular annulus
-// The middle line is created by trimming the y-coordinates of
-// the vertices on the outer circle. This tilts the edges of triangles.
-// The two triangles at the sides of the middle line look weird unless
-// the number of vertices is very large. This can be fixed by 
-// calculating the new vertices to be on the original edge of triangle.
+// The middle line is created by trimming the edges of triangles.
+// Triangles at the sides of the middle line get distorted. I think
+// it is not possible to draw this shape without calculating
+// those two endpoints separately (or making the triangles overlap)
 //
 // Interaction:
 // space: switch between wireframe and filled drawing
@@ -43,7 +42,7 @@ void drawCircAnn(float x, float y, float rout, float rin, float depth)
 // (modified to trim the y coordinates and orient the annuluses)
 {
   float angle;
-  float yOut;
+  float yOut, xOut;
   
   glBegin(GL_TRIANGLE_STRIP);
 
@@ -51,24 +50,34 @@ void drawCircAnn(float x, float y, float rout, float rin, float depth)
     {
       angle = 2 * PI * i / (float) vertices;
 
-      // orient the annulus so that it look better with a low number of vertices
+      // orient the annulus so that it looks better with a low number of vertices
       if (y > 50.0)
 	angle -= PI / 2;
       else
 	angle += PI / 2;
-      
-      yOut = y + sin(angle) * rout;
+
+      xOut = cos(angle) * rout;
+      yOut = sin(angle) * rout;
+
       if (y < 50.0) // drawing the bottom circle
       	{
-      	  yOut = yOut > 50.0 ? 50.0 : yOut;
+	  if (y + yOut > 50.0)
+	    {
+	      xOut = xOut * (50.0 - y) / yOut;
+	      yOut = 50.0 - y;
+	    }
       	}
       else
       	{
-      	  yOut = yOut < 50.0 ? 50.0 : yOut;
+	  if (y + yOut < 50.0)
+	    {
+	      xOut = xOut * (50.0 - y) / yOut;
+	      yOut = 50.0 - y;
+	    }
       	}
       
       glVertex3f(x + cos(angle) * rin, y + sin(angle) * rin, depth);
-      glVertex3f(x + cos(angle) * rout, yOut, depth);
+      glVertex3f(x + xOut, y + yOut, depth);
     }
   glEnd();
 }
