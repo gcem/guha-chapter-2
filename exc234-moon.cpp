@@ -25,6 +25,14 @@
 using namespace std;
 
 // Global variables
+static long font = (long)GLUT_BITMAP_8_BY_13; // Font selection.
+
+void writeBitmapString(void *font, char *string)
+{  
+   char *c;
+
+   for (c = string; *c != '\0'; c++) glutBitmapCharacter(font, *c);
+} 
 
 void drawMoon(float x, float y, float r, float rev)
 {
@@ -47,13 +55,20 @@ void drawScene(void)
   
   glClear(GL_COLOR_BUFFER_BIT);
 
-  glColor3f(0.0, 0.0, 0.0);
+  glColor3f(0.2, 0.2, 0.2);
 
   drawMoon(45.0, 50.0, 25.0, PI * 3 / 4);
   drawMoon(105.0, 50.0, 25.0, PI / 2);
   drawMoon(165.0, 50.0, 25.0, PI / 4);
-  
 
+  glColor3f(0.0, 0.0, 0.0);
+  glRasterPos3f(26.0, 20.0, 0.0);
+  writeBitmapString(GLUT_BITMAP_8_BY_13, "Crescent Moon");
+  glRasterPos3f(91.0, 20.0, 0.0);
+  writeBitmapString(GLUT_BITMAP_8_BY_13, "Half Moon");
+  glRasterPos3f(149.0, 20.0, 0.0);
+  writeBitmapString(GLUT_BITMAP_8_BY_13, "Three-quarter Moon");
+  
   glFlush();
 }
 
